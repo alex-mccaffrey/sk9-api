@@ -5,6 +5,7 @@ const cors = require('cors')
 const helmet = require('helmet')
 const {CLIENT_ORIGIN} = require('./config');
 const { NODE_ENV } = require('./config')
+const sessionsRouter = require('./sessions/sessions-router')
 
 const app = express()
 
@@ -20,6 +21,10 @@ app.use(
   })
 );
 
+
+
+//app.use('/api/folders', foldersRouter)
+app.use('/api/sessions', sessionsRouter)
 
 app.get('/', (req, res) => {
     res.send('Hello, world!')
