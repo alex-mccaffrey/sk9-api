@@ -22,29 +22,11 @@ sessionsRouter
     const knexInstance = req.app.get("db");
     SessionsService.getAllSessions(knexInstance)
       .then((sessions) => {
-        res.json(session.map(serializeSession));
+        res.json(sessions.map(serializeSession));
       })
       .catch(next);
   })
 
-  sessionsRouter
-  .route("/:session_id")
-  .all((req, res, next) => {
-    const { session_id } = req.params;
-    console.log("session_id", note_id);
-    console.log();
-    SessionsService.getById(req.app.get("db"), session_id)
-      .then((session) => {
-        if (!session) {
-          return res.status(404).json({
-            error: { message: `Session Not Found` },
-          });
-        }
-        res.session = session;
-        next();
-      })
-      .catch(next);
-  })
   .post(jsonParser, (req, res, next) => {
     const { title, modified, folder_id, details, drill_type } = req.body
     const newSession = { title, modified, folder_id, details, drill_type };
@@ -63,6 +45,31 @@ sessionsRouter
       })
       .catch(next)
   });
+
+  sessionsRouter
+  .route("/:session_id")
+  .all((req, res, next) => {
+    const { session_id } = req.params;
+    console.log("session_id", session_id);
+    console.log();
+    SessionsService.getById(req.app.get("db"), session_id)
+      .then((session) => {
+        if (!session) {
+          return res.status(404).json({
+            error: { message: `Session Not Found` },
+          });
+        }
+        res.session = session;
+        next();
+      })
+      .catch(next);
+  })
+
+  .get((req, res) => {
+    res.json(serializeSession(res.session))
+  })
+
+  
 
 
   module.exports = sessionsRouter;
