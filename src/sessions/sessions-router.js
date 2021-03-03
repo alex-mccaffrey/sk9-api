@@ -1,5 +1,4 @@
 const express = require("express");
-const { Session } = require("inspector");
 const path = require("path");
 const xss = require("xss");
 const SessionsService = require("./sessions-service");
@@ -9,10 +8,10 @@ const jsonParser = express.json();
 
 const serializeSession = (session) => ({
   id: session.id,
-  title: session.title,
+  title: xss(session.title),
   modified: session.modified,
   folder_id: session.folder_id,
-  details: session.details,
+  details: xss(session.details),
   drill_type: session.drill_type,
 });
 
@@ -28,14 +27,21 @@ sessionsRouter
   })
 
   .post(jsonParser, (req, res, next) => {
-    const { title, modified, folder_id, details, drill_type } = req.body
-    const newSession = { title, modified, folder_id, details, drill_type };
+    const { details, title, modified, folder_id, drill_type } = req.body
+    const newSession = { details, title, modified, folder_id, drill_type };
 
-    for (const [key, value] of Object.entries(newSession))
-      if (value == null)
-        return res.status(400).json({
-          error: { message: `'${key}' is required` },
-        });
+    // for (const [key, value] of Object.entries(newSession))
+    //   if (value == null)
+    //     return res.status(400).json({
+    //       error: { message: `'${key}' is required` },
+    //     });
+      for (const field of ['title', 'modified', 'folder_id', 'details', 'drill_type']) {
+        if (!req.body[field]) {
+          return res.status(400).send({
+            error: { message: `'${field}' is required` }
+          })
+        }
+      }
     SessionsService.insertSession(req.app.get("db"), newSession)
       .then((session) => {
         res
@@ -50,8 +56,6 @@ sessionsRouter
   .route("/:session_id")
   .all((req, res, next) => {
     const { session_id } = req.params;
-    console.log("session_id", session_id);
-    console.log();
     SessionsService.getById(req.app.get("db"), session_id)
       .then((session) => {
         if (!session) {
@@ -66,10 +70,33 @@ sessionsRouter
   })
 
   .get((req, res) => {
+    console.log(res.session)
     res.json(serializeSession(res.session))
   })
 
-  
-
+  .delete((req, res, next) => {
+    SessionsService.deleteSession(req.app.get("db"), req.params.session_id)
+      .then(() => {
+        res.status(204).end();
+      })
+      .catch(next);
+  })
+  .patch(jsonParser, (req, res, next) => {
+    const { title, modified, folder_id, details, drill_type } = req.body;
+    const sessionToUpdate = { title, modified, folder_id, details, drill_type };
+    const numberOfValues = Object.values(sessionToUpdate).filter(Boolean).length;
+    if (numberOfValues === 0) {
+      return res.status(400).json({
+        error: {
+          message: `Request body must contain either 'title', 'folder_id', 'details', or 'drill_type'`,
+        },
+      });
+    }
+    SessionsService.updateSession(req.app.get("db"), req.params.session_id, sessionToUpdate)
+      .then((numRowsAffected) => {
+        res.status(204).end();
+      })
+      .catch(next);
+  });
 
   module.exports = sessionsRouter;
