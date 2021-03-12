@@ -85,7 +85,7 @@ describe("Sessions Endpoints", () => {
 
   // These are the POST tests
 
-  describe.only("POST /api/sessions", () => {
+  describe("POST /api/sessions", () => {
     it(`responds with 400 missing 'title' if not supplied`, () => {
       const newSessionMissingTitle = {
         // title: 'test-title',
