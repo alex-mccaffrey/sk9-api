@@ -5,6 +5,7 @@ const store = require("../src/store");
 const supertest = require("supertest");
 const { makeFoldersArray } = require("./folders.fixtures");
 
+
 describe("Sessions Endpoints", () => {
   let sessionsCopy, db;
 
