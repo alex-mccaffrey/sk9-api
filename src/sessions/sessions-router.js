@@ -94,7 +94,10 @@ sessionsRouter
     }
     SessionsService.updateSession(req.app.get("db"), req.params.session_id, sessionToUpdate)
       .then((numRowsAffected) => {
-        res.status(204).end();
+        // res.status(204).end();
+        res.status(201)
+        .location(`/sessions/${sessionToUpdate.id}`)
+        .json(serializeSession(sessionToUpdate))
       })
       .catch(next);
   });
