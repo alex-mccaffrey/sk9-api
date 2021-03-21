@@ -34,12 +34,6 @@ Deployed via Heroku
 
 ## API Endpoints
 
-### Users Router
-```
-- /api/users/:userId
-- - GET - gets all folders for user 
-- - POST - creates a new folder for user
-```
 
 ### Folders Router
 ```
@@ -59,6 +53,7 @@ Deployed via Heroku
 ```
 - /api/sessions 
 - - GET - gets all sessions 
+- - POST - creates a new sessions
 ```
 
 ### Sessions/:id Router
