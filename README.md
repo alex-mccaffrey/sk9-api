@@ -45,7 +45,7 @@ Deployed via Heroku
 ### folders/:folderId Router 
 ```
 - /api/folders/:folderId
-- - GET - get a specific folder by id 
+- - GET - gets fodlers by id 
 - - DELETE - deletes folder by id 
 ```
 
@@ -59,5 +59,5 @@ Deployed via Heroku
 ### Sessions/:id Router
 ```
 - /api/sessions/:sessionId
-- - GET - gets a specific session by id 
+- - GET - gets sessions by id 
 ```
