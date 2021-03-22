@@ -37,7 +37,7 @@ describe("Folders Endpoints", () => {
         return (
           supertest(app)
             .get("/api/folders")
-            //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+
             .expect(200, [])
         );
       });
@@ -49,7 +49,7 @@ describe("Folders Endpoints", () => {
         return (
           supertest(app)
             .get(`/api/folders/123`)
-            //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+
             .expect(404, {
               error: { message: `Folder Not Found` },
             })
@@ -69,7 +69,7 @@ describe("Folders Endpoints", () => {
         return (
           supertest(app)
             .get(`/api/folders/${folderId}`)
-            //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+
             .expect(200, expectedFolder)
         );
       });
@@ -81,7 +81,6 @@ describe("Folders Endpoints", () => {
       it(`responds 404 when folder doesn't exist`, () => {
         return supertest(app)
           .delete(`/api/folders/123`)
-          //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
           .expect(404, {
             error: { message: `Folder Not Found` },
           });
@@ -100,12 +99,11 @@ describe("Folders Endpoints", () => {
         const expectedFolders = testFolders.filter((nt) => nt.id !== idToRemove);
         return supertest(app)
           .delete(`/api/folders/${idToRemove}`)
-          //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
           .expect(204)
           .then(() =>
             supertest(app)
               .get(`/api/folders`)
-              //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+  
               .expect(expectedFolders)
           );
       });
@@ -120,7 +118,6 @@ describe("Folders Endpoints", () => {
       return supertest(app)
         .post(`/api/folders`)
         .send(newFolderMissingTitle)
-        //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
         .expect(400, {
           error: { message: `Missing 'title' in request body` },
         });
@@ -134,7 +131,6 @@ describe("Folders Endpoints", () => {
       return supertest(app)
         .post(`/api/folders`)
         .send(newFolder)
-        //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
         .expect(201)
         .expect((res) => {
           expect(res.body.title).to.eql(newFolder.title);
@@ -144,7 +140,7 @@ describe("Folders Endpoints", () => {
         .then((res) =>
           supertest(app)
             .get(`/api/folders/${res.body.id}`)
-            //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+
             .expect(res.body)
         );
     });
@@ -157,7 +153,6 @@ describe("Folders Endpoints", () => {
         const folderId = 123456;
         return supertest(app)
           .patch(`/api/folders/${folderId}`)
-          //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
           .expect(404, { error: { message: `Folder Not Found` } });
       });
     });
@@ -180,12 +175,11 @@ describe("Folders Endpoints", () => {
         return supertest(app)
           .patch(`/api/folders/${idToUpdate}`)
           .send(updateFolder)
-          //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
           .expect(204)
           .then((res) =>
             supertest(app)
               .get(`/api/folders/${idToUpdate}`)
-              //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+  
               .expect(expectedFolder)
           );
       });
@@ -194,7 +188,6 @@ describe("Folders Endpoints", () => {
         const idToUpdate = 2;
         return supertest(app)
           .patch(`/api/folders/${idToUpdate}`)
-          //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
           .send({ irrelevantField: "foo" })
           .expect(400, {
             error: {
@@ -219,12 +212,11 @@ describe("Folders Endpoints", () => {
             ...updateFolder,
             fieldToIgnore: "should not be in GET response",
           })
-          //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
           .expect(204)
           .then((res) =>
             supertest(app)
               .get(`/api/folders/${idToUpdate}`)
-              //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+  
               .expect(expectedFolder)
           );
       });

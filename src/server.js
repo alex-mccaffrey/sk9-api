@@ -1,7 +1,6 @@
 const express = require('express');
 const knex = require("knex");
 const app = require('./app')
-//const app = express();
 const { DATABASE_URL } = require("./config")
 
 const PORT = process.env.PORT || 8000;

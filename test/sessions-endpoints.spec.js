@@ -39,7 +39,6 @@ describe("Sessions Endpoints", () => {
         return (
           supertest(app)
             .get("/api/sessions")
-            //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
             .expect(200, [])
         );
       });
@@ -52,7 +51,6 @@ describe("Sessions Endpoints", () => {
         return (
           supertest(app)
             .get(`/api/sessions/123`)
-            //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
             .expect(404, {
               error: { message: `Session Not Found` },
             })
@@ -77,7 +75,6 @@ describe("Sessions Endpoints", () => {
         return (
           supertest(app)
             .get(`/api/sessions/${sessionId}`)
-            //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
             .expect(200, expectedSession)
         );
       });
@@ -99,7 +96,6 @@ describe("Sessions Endpoints", () => {
         supertest(app)
           .post(`/api/sessions`)
           .send(newSessionMissingTitle)
-          //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
           .expect(400, {
             error: { message: `'title' is required` },
           })
@@ -118,7 +114,6 @@ describe("Sessions Endpoints", () => {
         supertest(app)
           .post(`/api/sessions`)
           .send(newSessionMissingFolder)
-          //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
           .expect(400, {
             error: { message: `'folder_id' is required` },
           })
@@ -137,7 +132,6 @@ describe("Sessions Endpoints", () => {
         supertest(app)
           .post(`/api/sessions`)
           .send(newSessionMissingDetails)
-          //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
           .expect(400, {
             error: { message: `'details' is required` },
           })
@@ -155,7 +149,6 @@ describe("Sessions Endpoints", () => {
         supertest(app)
           .post(`/api/sessions`)
           .send(newSessionMissingDrillType)
-          //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
           .expect(400, {
             error: { message: `'drill_type' is required` },
           })
@@ -168,7 +161,6 @@ describe("Sessions Endpoints", () => {
       it(`responds 404 when session doesn't exist`, () => {
         return supertest(app)
           .delete(`/api/sessions/123`)
-          //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
           .expect(404, {
             error: { message: `Session Not Found` },
           });
@@ -191,12 +183,10 @@ describe("Sessions Endpoints", () => {
           const expectedSessions = testSessions.filter((nt) => nt.id !== idToRemove);
           return supertest(app)
             .delete(`/api/sessions/${idToRemove}`)
-            //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
             .expect(204)
             .then(() =>
               supertest(app)
                 .get(`/api/sessions`)
-                //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
                 .expect(expectedSessions)
             );
         });
@@ -209,7 +199,6 @@ describe("Sessions Endpoints", () => {
             const sessionId = 123456;
             return supertest(app)
               .patch(`/api/sessions/${sessionId}`)
-              //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
               .expect(404, { error: { message: `Session Not Found` } });
           });
         });
@@ -239,12 +228,10 @@ describe("Sessions Endpoints", () => {
             return supertest(app)
               .patch(`/api/sessions/${idToUpdate}`)
               .send(updateSession)
-              //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
               .expect(204)
               .then((res) =>
                 supertest(app)
                   .get(`/api/sessions/${idToUpdate}`)
-                  //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
                   .expect(expectedSession)
               );
           });
@@ -253,7 +240,6 @@ describe("Sessions Endpoints", () => {
             const idToUpdate = 2;
             return supertest(app)
               .patch(`/api/sessions/${idToUpdate}`)
-              //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
               .send({ irrelevantField: "foo" })
               .expect(400, {
                 error: {
@@ -278,12 +264,10 @@ describe("Sessions Endpoints", () => {
                 ...updateSession,
                 fieldToIgnore: "should not be in GET response",
               })
-              //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
               .expect(204)
               .then((res) =>
                 supertest(app)
                   .get(`/api/sessions/${idToUpdate}`)
-                  //.set("Authorization", `Bearer ${process.env.API_TOKEN}`)
                   .expect(expectedSession)
               );
           });

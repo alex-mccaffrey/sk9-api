@@ -35,28 +35,7 @@ function makeSessionsArray() {
     ];
   }
 
-//   function makeMaliciousNote() {
-//     const maliciousNote = {
-//       id: 911,
-//       id: 3,
-//       name: 'Naughty naughty very naughty <script>alert("xss");</script>',
-//       modified: "2018-08-15 17:00:00",
-//       folder_id: "3",
-//       content: `Bad image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.`,
-//     };
-//     const expectedNote = {
-//       ...maliciousNote,
-//       name:
-//       'Naughty naughty very naughty <script>alert("xss");</script>',
-//       content: `Bad image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.`,
-//     };
-//     return {
-//       maliciousNote,
-//       expectedNote,
-//     };
-//   }
   
   module.exports = {
     makeSessionsArray
-    //makeMaliciousNote,
   };

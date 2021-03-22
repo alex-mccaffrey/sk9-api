@@ -29,12 +29,6 @@ sessionsRouter
   .post(jsonParser, (req, res, next) => {
     const { details, title, modified, folder_id, drill_type } = req.body
     const newSession = { details, title, modified, folder_id, drill_type };
-
-    // for (const [key, value] of Object.entries(newSession))
-    //   if (value == null)
-    //     return res.status(400).json({
-    //       error: { message: `'${key}' is required` },
-    //     });
       for (const field of ['title', 'modified', 'folder_id', 'details', 'drill_type']) {
         if (!req.body[field]) {
           return res.status(400).send({
@@ -94,7 +88,6 @@ sessionsRouter
     }
     SessionsService.updateSession(req.app.get("db"), req.params.session_id, sessionToUpdate)
       .then((numRowsAffected) => {
-        // res.status(204).end();
         res.status(201)
         .location(`/sessions/${sessionToUpdate.id}`)
         .json(serializeSession(sessionToUpdate))
