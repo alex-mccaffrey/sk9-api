@@ -64,7 +64,6 @@ sessionsRouter
   })
 
   .get((req, res) => {
-    console.log(res.session)
     res.json(serializeSession(res.session))
   })
 
@@ -75,6 +74,7 @@ sessionsRouter
       })
       .catch(next);
   })
+
   .patch(jsonParser, (req, res, next) => {
     const { title, modified, folder_id, details, drill_type } = req.body;
     const sessionToUpdate = { title, modified, folder_id, details, drill_type };
@@ -86,6 +86,7 @@ sessionsRouter
         },
       });
     }
+    
     SessionsService.updateSession(req.app.get("db"), req.params.session_id, sessionToUpdate)
       .then((numRowsAffected) => {
         res.status(201)

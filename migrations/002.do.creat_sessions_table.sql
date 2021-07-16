@@ -1,14 +1,3 @@
--- CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
--- CREATE TABLE sk9_sessions (
---      id UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
---     title TEXT NOT NULL,
---     modified TIMESTAMPTZ DEFAULT now () NOT NULL,
---     folder_id uuid
---         REFERENCES sk9_folders(id) ON DELETE CASCADE,
---     details TEXT NOT NULL,
---     drill_type TEXT
--- );
 
 
 CREATE TABLE sk9_sessions (
